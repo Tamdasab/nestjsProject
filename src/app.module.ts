@@ -1,26 +1,40 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
+import { LoggerMiddleware } from './logger.middleware';
+import { ConfigurationModule } from './configuration/configuration.module';
 import { ConfigModule } from '@nestjs/config';
 import { TaskModule } from './tasks/task.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+const options: Record<string, string> = {
+  environment: 'development',
+};
+
 @Module({
   imports: [
+    ConfigurationModule.register(options),
+    UserModule,
     ConfigModule.forRoot(),
     TaskModule,
     TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as any,
-      host: process.env.PG_TASK,
-      port: parseInt(process.env.PG_PORT),
-      username: process.env.PG_TASK,
-      password: process.env.PG_PASSWORD,
-      database: process.env.PG_DB,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      type: 'postgres',
+      host: 'db',
+      port: 5432,
+      username: 'postgres',
+      password: 'postgres',
+      database: 'postgres',
+      entities: [],
       synchronize: true,
+      autoLoadEntities: true,
     }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes(AppController);
+  }
+}
