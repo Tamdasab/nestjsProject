@@ -9,12 +9,6 @@ export class Task {
   title: string;
 
   @Column()
-  description: string;
-
-  @Column()
-  status: boolean;
-
-  @Column()
   createdAt: Date;
 
   @Column()
