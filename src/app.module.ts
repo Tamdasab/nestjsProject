@@ -3,12 +3,17 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './logger.middleware';
+import { ConfigurationModule } from './configuration/configuration.module';
 import { ConfigModule } from '@nestjs/config';
 import { TaskModule } from './tasks/task.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
+    ConfigurationModule.register({
+      privateKey: 'secretKey',
+      expiresIn: '2h',
+    }),
     UserModule,
     ConfigModule.forRoot(),
     TaskModule,
