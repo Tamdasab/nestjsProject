@@ -14,12 +14,9 @@ export class TaskService {
     return this.taskRepository.find();
   }
 
-  async createTask(Task): Promise<Task> {
-    const newTask = this.taskRepository.create({
-      title: Task.title,
-      description: Task.description,
-    });
-    return this.taskRepository.save(newTask);
+  async createTask(taskData: Partial<Task>): Promise<Task> {
+    const newTask = this.taskRepository.create(taskData);
+    return await this.taskRepository.save(newTask);
   }
 
   async deleteTaskeById(id: number): Promise<void> {
