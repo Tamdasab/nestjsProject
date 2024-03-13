@@ -1,10 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { OptionsModule } from './configuration.options';
 
 @Injectable()
 export class ConfigurationService {
-  constructor(private options: Record<string, string>) {}
+  private jwtService: JwtService = new JwtService();
+  constructor(private options: OptionsModule) {}
 
-  getValue(key: string): string {
-    return this.options[key];
+  generate(payload: any): string {
+    return this.jwtService.sign(payload, {
+      secret: this.options.privateKey,
+      expiresIn: this.options.expiresIn,
+    });
+  }
+
+  verify(token: string): any {
+    return this.jwtService.verify(token, {
+      secret: this.options.privateKey,
+    });
   }
 }

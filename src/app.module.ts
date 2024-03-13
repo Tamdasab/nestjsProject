@@ -3,18 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { LoggerMiddleware } from './logger.middleware';
-import { ConfigurationModule } from './configuration/configuration.module';
 import { ConfigModule } from '@nestjs/config';
 import { TaskModule } from './tasks/task.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-const options: Record<string, string> = {
-  environment: 'development',
-};
-
 @Module({
   imports: [
-    ConfigurationModule.register(options),
     UserModule,
     ConfigModule.forRoot(),
     TaskModule,
