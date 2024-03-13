@@ -8,4 +8,4 @@ $ npm install
 
 ```bash
 # docker
-$ docker compose up -- build
+$ docker compose up

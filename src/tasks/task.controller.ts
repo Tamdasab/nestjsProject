@@ -25,9 +25,10 @@ export class TaskController {
   async createNote(
     @Body() payload: { title: string; description: string },
   ): Promise<Task> {
-    if (!payload.title || !payload.description)
-      throw new BadRequestException('Title and description are required');
-    return await this.taskService.createTask(Task);
+    if (!payload.title) {
+      throw new BadRequestException('Title is required');
+    }
+    return await this.taskService.createTask(payload);
   }
 
   @Delete(':id')
