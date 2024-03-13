@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Delete } from '@nestjs/common';
+import {
+  Controller,
+  BadRequestException,
+  Get,
+  Post,
+  Delete,
+  Body,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { Task } from './task.entity';
 
@@ -8,19 +15,26 @@ export class TaskController {
 
   @Get()
   async getTasks(): Promise<Task[]> {
+    if ((await this.taskService.findAllTasks()).length === 0) {
+      throw new Error('No tasks found');
+    }
     return this.taskService.findAllTasks();
   }
 
   @Post()
-  async postTask(task: Task): Promise<Task> {
-    return this.taskService.createTask(task);
+  async createNote(
+    @Body() payload: { title: string; description: string },
+  ): Promise<Task> {
+    if (!payload.title || !payload.description)
+      throw new BadRequestException('Title and description are required');
+    return await this.taskService.createTask(Task);
   }
 
   @Delete(':id')
   async deleteTask(id: number): Promise<any> {
     const deletetask = this.taskService.deleteTaskeById(id);
     if (!deletetask) {
-      console.log(deletetask);
+      throw new Error('Task not found');
     }
   }
 }

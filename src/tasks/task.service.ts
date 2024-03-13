@@ -14,8 +14,11 @@ export class TaskService {
     return this.taskRepository.find();
   }
 
-  async createTask(task: Task): Promise<Task> {
-    const newTask = this.taskRepository.create(task);
+  async createTask(Task): Promise<Task> {
+    const newTask = this.taskRepository.create({
+      title: Task.title,
+      description: Task.description,
+    });
     return this.taskRepository.save(newTask);
   }
 

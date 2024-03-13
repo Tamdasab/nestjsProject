@@ -9,8 +9,5 @@ export class Task {
   title: string;
 
   @Column()
-  createdAt: Date;
-
-  @Column()
-  deadline: Date;
+  description: string;
 }

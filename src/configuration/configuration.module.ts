@@ -1,9 +1,10 @@
 import { ConfigurationService } from './configuration.service';
 import { DynamicModule, Module } from '@nestjs/common';
+import { OptionsModule } from './configuration.options';
 
 @Module({})
 export class ConfigurationModule {
-  static register(options: Record<string, string>): DynamicModule {
+  static register(options: OptionsModule): DynamicModule {
     return {
       module: ConfigurationModule,
       providers: [
